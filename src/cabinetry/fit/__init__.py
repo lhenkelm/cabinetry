@@ -142,7 +142,7 @@ def _fit_model_custom(
 
     # use parameter settings provided in function arguments if they exist, else defaults
     init_pars = init_pars or model.config.suggested_init()
-    fix_pars = fix_pars or model.config.suggested_fixed()
+    fix_pars = fix_pars or [bool(p) for p in model.config.suggested_fixed()]
     par_bounds = par_bounds or model.config.suggested_bounds()
 
     labels = model.config.par_names()
@@ -473,7 +473,7 @@ def ranking(
     # during the ranking (init/fix changes)
     # use parameter settings provided in function arguments if they exist, else defaults
     init_pars = init_pars or model.config.suggested_init()
-    fix_pars = fix_pars or model.config.suggested_fixed()
+    fix_pars = fix_pars or [bool(p) for p in model.config.suggested_fixed()]
 
     all_impacts = []
     for i_par, label in enumerate(labels):
@@ -610,7 +610,7 @@ def scan(
     # during the scan (init/fix changes)
     # use parameter settings provided in function arguments if they exist, else defaults
     init_pars = init_pars or model.config.suggested_init()
-    fix_pars = fix_pars or model.config.suggested_fixed()
+    fix_pars = fix_pars or [bool(p) for p in model.config.suggested_fixed()]
 
     fix_pars[par_index] = True  # hold scan parameter constant in fits
 

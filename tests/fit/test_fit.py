@@ -53,7 +53,7 @@ def test__fit_model_pyhf(mock_minos, example_spec, example_spec_multibin):
     init_pars = model.config.suggested_init()
     init_pars[1] = 0.9
     init_pars[2] = 1.1
-    fix_pars = model.config.suggested_fixed()
+    fix_pars = [bool(p) for p in model.config.suggested_fixed()]
     fix_pars[1] = True
     fix_pars[2] = True
     fit_results = fit._fit_model_pyhf(
@@ -110,7 +110,7 @@ def test__fit_model_custom(mock_minos, example_spec, example_spec_multibin):
     init_pars = model.config.suggested_init()
     init_pars[1] = 0.9
     init_pars[2] = 1.1
-    fix_pars = model.config.suggested_fixed()
+    fix_pars = [bool(p) for p in model.config.suggested_fixed()]
     fix_pars[1] = True
     fix_pars[2] = True
     fit_results = fit._fit_model_custom(
