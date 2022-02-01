@@ -197,7 +197,7 @@ def test_yield_stdev(example_spec, example_spec_multibin):
 )
 @mock.patch(
     "cabinetry.model_utils.prefit_uncertainties",
-    side_effect=[[0.2, 0.4, 0.0, 0.125], [0.04956657, 0.0], [0.04956657, 0.0]],
+    return_value=np.asarray([0.0, 0.2, 0.4, 0.125]),
 )
 @mock.patch(
     "cabinetry.model_utils.asimov_parameters",
@@ -230,7 +230,7 @@ def test_prediction(
     assert mock_stdev.call_count == 1
     assert mock_stdev.call_args_list[0][0][0] == model
     assert np.allclose(mock_stdev.call_args_list[0][0][1], [1.0, 1.0, 1.0, 1.0])
-    assert np.allclose(mock_stdev.call_args_list[0][0][2], [0.2, 0.4, 0.0, 0.125])
+    assert np.allclose(mock_stdev.call_args_list[0][0][2], [0.0, 0.2, 0.4, 0.125])
     assert np.allclose(
         mock_stdev.call_args_list[0][0][3], np.diagflat([1.0, 1.0, 1.0, 1.0])
     )
