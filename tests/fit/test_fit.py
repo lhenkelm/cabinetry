@@ -65,9 +65,9 @@ def test__fit_model_pyhf(mock_minos, example_spec, example_spec_multibin):
 
     # custom parameter bounds
     model, data = model_utils.model_and_data(example_spec)
-    par_bounds = [(0.1, 2), (0, 5)]
+    par_bounds = [(0, 5), (0.1, 2)]
     fit_results = fit._fit_model_pyhf(model, data, par_bounds=par_bounds)
-    assert np.allclose(fit_results.bestfit, [1.1, 5.0])
+    assert np.allclose(fit_results.bestfit, [5.0, 1.1])
 
     # including minos, one parameter is unknown
     model, data = model_utils.model_and_data(example_spec)
@@ -122,9 +122,9 @@ def test__fit_model_custom(mock_minos, example_spec, example_spec_multibin):
 
     # custom parameter bounds
     model, data = model_utils.model_and_data(example_spec)
-    par_bounds = [(0.1, 2), (0, 5)]
+    par_bounds = [(0, 5), (0.1, 2)]
     fit_results = fit._fit_model_custom(model, data, par_bounds=par_bounds)
-    assert np.allclose(fit_results.bestfit, [1.1, 5.0])
+    assert np.allclose(fit_results.bestfit, [5.0, 1.1])
 
     # including minos
     model, data = model_utils.model_and_data(example_spec)
@@ -175,7 +175,7 @@ def test__fit_model(mock_pyhf, mock_custom, example_spec):
         minos=["Signal strength"],
         init_pars=[1.5, 2.0],
         fix_pars=[False, True],
-        par_bounds=[(0.1, 10.0), (0, 5)],
+        par_bounds=[(0, 5), (0.1, 10.0)],
     )
     assert mock_pyhf.call_count == 2
     assert mock_pyhf.call_args[0][0].spec == model.spec
@@ -184,7 +184,7 @@ def test__fit_model(mock_pyhf, mock_custom, example_spec):
         "minos": ["Signal strength"],
         "init_pars": [1.5, 2.0],
         "fix_pars": [False, True],
-        "par_bounds": [(0.1, 10.0), (0, 5)],
+        "par_bounds": [(0, 5), (0.1, 10.0)],
     }
     assert np.allclose(fit_results.bestfit, [1.1])
 
@@ -208,7 +208,7 @@ def test__fit_model(mock_pyhf, mock_custom, example_spec):
         minos=["Signal strength"],
         init_pars=[1.5, 2.0],
         fix_pars=[False, True],
-        par_bounds=[(0.1, 10.0), (0, 5)],
+        par_bounds=[(0, 5), (0.1, 10.0)],
         custom_fit=True,
     )
     assert mock_custom.call_count == 2
@@ -218,7 +218,7 @@ def test__fit_model(mock_pyhf, mock_custom, example_spec):
         "minos": ["Signal strength"],
         "init_pars": [1.5, 2.0],
         "fix_pars": [False, True],
-        "par_bounds": [(0.1, 10.0), (0, 5)],
+        "par_bounds": [(0, 5), (0.1, 10.0)],
     }
     assert np.allclose(fit_results.bestfit, [1.2])
 
