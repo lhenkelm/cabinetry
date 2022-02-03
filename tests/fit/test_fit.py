@@ -462,9 +462,9 @@ def test_ranking(mock_fit, example_spec):
     ranking_results = fit.ranking(
         model,
         data,
-        init_pars=[1.0, 1.5],
+        init_pars=[1.5, 1.0],
         fix_pars=[False, False],
-        par_bounds=[(0.1, 10), (0, 5)],
+        par_bounds=[(0, 5), (0.1, 10)],
         custom_fit=True,
     )
     assert mock_fit.call_count == 9
@@ -472,9 +472,9 @@ def test_ranking(mock_fit, example_spec):
     assert mock_fit.call_args_list[-3] == (
         (model, data),
         {
-            "init_pars": [1.0, 1.5],
+            "init_pars": [1.5, 1.0],
             "fix_pars": [False, False],
-            "par_bounds": [(0.1, 10), (0, 5)],
+            "par_bounds": [(0, 5), (0.1, 10)],
             "custom_fit": True,
         },
     )
@@ -482,12 +482,12 @@ def test_ranking(mock_fit, example_spec):
     assert mock_fit.call_args_list[-2][0] == (model, data)
     assert np.allclose(mock_fit.call_args_list[-2][1]["init_pars"], [1.5, 1.2])
     assert mock_fit.call_args_list[-2][1]["fix_pars"] == [False, True]
-    assert mock_fit.call_args_list[-2][1]["par_bounds"] == [(0.1, 10), (0, 5)]
+    assert mock_fit.call_args_list[-2][1]["par_bounds"] == [(0, 5), (0.1, 10)]
     assert mock_fit.call_args_list[-2][1]["custom_fit"] is True
     assert mock_fit.call_args_list[-1][0] == (model, data)
     assert np.allclose(mock_fit.call_args_list[-1][1]["init_pars"], [1.5, 0.6])
     assert mock_fit.call_args_list[-1][1]["fix_pars"] == [False, True]
-    assert mock_fit.call_args_list[-1][1]["par_bounds"] == [(0.1, 10), (0, 5)]
+    assert mock_fit.call_args_list[-1][1]["par_bounds"] == [(0, 5), (0.1, 10)]
     assert mock_fit.call_args_list[-1][1]["custom_fit"] is True
     # ranking results
     assert np.allclose(ranking_results.prefit_up, [0.0])
@@ -556,16 +556,16 @@ def test_scan(mock_fit, example_spec):
         n_steps=5,
         init_pars=[1.0, 1.0],
         fix_pars=[False, False],
-        par_bounds=[(0.1, 10), (0, 5)],
+        par_bounds=[(0, 5), (0.1, 10)],
         custom_fit=True,
     )
     expected_custom_scan = np.linspace(1.0, 1.5, 5)
     assert np.allclose(scan_results.parameter_values, expected_custom_scan)
     assert mock_fit.call_args[1]["custom_fit"] is True
     assert mock_fit.call_args[1] == {
-        "init_pars": [1.0, 1.5],  # last step of scan
-        "fix_pars": [False, True],
-        "par_bounds": [(0.1, 10), (0, 5)],
+        "init_pars": [1.5, 1.0],  # last step of scan
+        "fix_pars": [True, False],
+        "par_bounds": [(0, 5), (0.1, 10)],
         "custom_fit": True,
     }
 
@@ -655,17 +655,17 @@ def test_limit(example_spec_with_background, caplog):
             fit.limit(
                 model,
                 data,
-                init_pars=[1.0, 0.9],
-                fix_pars=[True, False],
-                par_bounds=[(0.1, 10.0), (-1, 5)],
+                init_pars=[0.9, 1.0],
+                fix_pars=[False, True],
+                par_bounds=[(-1, 5), (0.1, 10.0)],
             )
         assert mock_test.call_args_list == [
             (
                 (0.1, data, model),
                 {
-                    "init_pars": [1.0, 0.9],
-                    "fixed_params": [True, False],
-                    "par_bounds": [(0.1, 10.0), (0, 5)],
+                    "init_pars": [0.9, 1.0],
+                    "fixed_params": [False, True],
+                    "par_bounds": [(0, 5), (0.1, 10.0)],
                     "test_stat": "qtilde",
                     "return_expected_set": True,
                 },
@@ -705,17 +705,17 @@ def test_significance(example_spec_with_background):
         fit.significance(
             model,
             data,
-            init_pars=[1.0, 0.9],
-            fix_pars=[True, False],
-            par_bounds=[(0.1, 10.0), (0, 5)],
+            init_pars=[0.9, 1.0],
+            fix_pars=[False, True],
+            par_bounds=[(0, 5), (0.1, 10.0)],
         )
     assert mock_test.call_args_list == [
         (
             (0.0, data, model),
             {
-                "init_pars": [1.0, 0.9],
-                "fixed_params": [True, False],
-                "par_bounds": [(0.1, 10.0), (0, 5)],
+                "init_pars": [0.9, 1.0],
+                "fixed_params": [False, True],
+                "par_bounds": [(0, 5), (0.1, 10.0)],
                 "test_stat": "q0",
                 "return_expected": True,
             },
